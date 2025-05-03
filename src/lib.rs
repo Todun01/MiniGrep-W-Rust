@@ -41,7 +41,7 @@ pub fn search_case_insensitivity< 'a>(query: &str, filetext: & 'a str) -> Vec<& 
     let mut results: Vec<&str> = Vec::new();
     let _query = query.to_lowercase();
     for line in filetext.lines(){
-        if line.contains(&_query){
+        if line.to_lowercase().contains(&_query){
             results.push(line)
         }
     }
@@ -59,7 +59,7 @@ mod tests{
 this is the first line
 second line here
 ah the third line, finally";
-    assert_eq!(vec!["second line here"], search_case_insensitivity(query, &filetext.to_lowercase()));
+    assert_eq!(vec!["second line here"], search_case_insensitivity(query, filetext));
  }
 
  #[test]
@@ -74,7 +74,7 @@ ah the third line, finally";
         "this is the first line",
         "second line here",
         "ah the third line, finally"],
-        search_case_insensitivity(query, &filetext.to_lowercase())
+        search_case_insensitivity(query, filetext)
     );
 
  }
