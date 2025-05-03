@@ -36,17 +36,45 @@ pub fn search< 'a>(_query: &str, _filetext: & 'a str) -> Vec<& 'a str>{
     }
     results
 }
+
+pub fn search_case_insensitivity< 'a>(query: &str, filetext: & 'a str) -> Vec<& 'a str>{
+    let mut results: Vec<&str> = Vec::new();
+    let _query = query.to_lowercase();
+    for line in filetext.lines(){
+        if line.contains(&_query){
+            results.push(line)
+        }
+    }
+    results
+}
+
 #[cfg(test)]
 mod tests{
     use super::*;
 }
  #[test]
- fn one_result(){
-    let query = "here";
+ fn case_sensitive(){
+    let query = "Here";
     let filetext = "/
 this is the first line
 second line here
 ah the third line, finally";
-    assert_eq!(vec!["second line here"], search(query, filetext));
+    assert_eq!(vec!["second line here"], search_case_insensitivity(query, &filetext.to_lowercase()));
  }
 
+ #[test]
+ fn case_insensitive(){
+    let query = "Ine";
+    let filetext = "/
+this is the first line
+second line here
+ah the third line, finally";
+    assert_eq!(
+        vec![
+        "this is the first line",
+        "second line here",
+        "ah the third line, finally"],
+        search_case_insensitivity(query, &filetext.to_lowercase())
+    );
+
+ }
